@@ -12,3 +12,8 @@ $ pig -x local -f pregunta.pig
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+datos = LOAD 'data.tsv' AS (letra:int, bolsa:BAG{(letras:chararray)}, mapa:MAP[]);
+letras = FOREACH datos GENERATE FLATTEN(bolsa) as letra;
+grouped = GROUP letras by letra;
+letra_count = FOREACH grouped GENERATE group, COUNT(letras);
+STORE letra_count INTO 'output' using PigStorage(',');
