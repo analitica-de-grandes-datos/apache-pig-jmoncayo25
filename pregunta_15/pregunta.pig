@@ -22,4 +22,4 @@ $ pig -x local -f pregunta.pig
 datos = LOAD 'data.csv' USING PigStorage(',') AS(n:int, nombre:chararray, apellido:chararray, fecha:chararray, color:chararray, key:int);
 specific_columns = FOREACH datos GENERATE nombre, color;
 filtering = FILTER specific_columns BY (color == 'blue') AND (nombre MATCHES '.*^Z.*');
-STORE filtering INTO 'output';
+STORE filtering INTO 'output' USING PigStorage(' ');
