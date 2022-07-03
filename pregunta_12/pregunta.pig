@@ -27,3 +27,7 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+datos = LOAD 'data.csv' USING PigStorage(',') AS(n:int, nombre:chararray, apellido:chararray, fecha:chararray, color:chararray, key:int);
+specific_columns = FOREACH datos GENERATE apellido;
+apellido_match = FILTER specific_columns BY apellido IN ('Hamilton', 'Holcomb', 'Garrett', 'Fry', 'Kinney', 'Klein', 'Diaz', 'Guy', 'Estes', 'Jarvis', 'Knight');
+STORE apellido_match INTO 'output';
