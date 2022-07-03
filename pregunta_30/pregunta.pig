@@ -34,3 +34,14 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+datos = LOAD 'data.csv' using PigStorage(',') AS (id:int,  nombre:chararray, apellido:chararray,   fecha:chararray,  color:chararray, key:int);
+transform = FOREACH datos GENERATE fecha,  LOWER(ToString(ToDate(fecha,'yyyy-MM-dd', '-05:00'),'dd')) as dd, ToString(ToDate(fecha,'yyyy-MM-dd', '-05:00'),'d') as d, ToString(ToDate(fecha,'yyyy-MM-dd', '-05:00'),'EEEE') as d_name;
+transform2 = FOREACH transform GENERATE fecha, dd, d, REPLACE($3,'Monday','lunes');
+transform3 = FOREACH transform2 GENERATE fecha, dd, d, REPLACE($3,'Tuesday','martes');
+transform4 = FOREACH transform3 GENERATE fecha, dd, d, REPLACE($3,'Wednesday','miercoles');
+transform5 = FOREACH transform4 GENERATE fecha, dd, d, REPLACE($3,'Thursday','jueves');
+transform6 = FOREACH transform5 GENERATE fecha, dd, d, REPLACE($3,'Friday','viernes');
+transform7 = FOREACH transform6 GENERATE fecha, dd, d, REPLACE($3,'Saturday','sabado');
+transform8 = FOREACH transform7 GENERATE fecha, dd, d, REPLACE($3,'Sunday','domingo');
+transform9 = FOREACH transform8 GENERATE fecha, dd, d, SUBSTRING($3, 0, 3), $3; 
+STORE transform9 INTO 'output' using PigStorage(',');
